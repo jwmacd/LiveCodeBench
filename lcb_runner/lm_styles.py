@@ -57,6 +57,14 @@ class LanguageModel:
 
 
 LanguageModelList: list[LanguageModel] = [
+    # --- START OF USER'S CUSTOM VLLM MODEL ---
+    LanguageModel(
+        model_name="/models/",  # Matches your vLLM served model name
+        model_repr="MyVLLMServerModel", # Filesystem-friendly name for outputs
+        model_style=LMStyle.OpenAIChat,    # Uses the standard OpenAI API chat runner
+        release_date=datetime(2024, 1, 1), # Placeholder date
+        link=None 
+    ),
     ## LLama3 Base (8B and 70B)
     LanguageModel(
         "meta-llama/Meta-Llama-3-70B",
