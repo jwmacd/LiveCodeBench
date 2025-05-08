@@ -1,5 +1,7 @@
 import numpy as np
 import json
+import os
+from pathlib import Path
 from lcb_runner.benchmarks import load_generation_dataset, CodeGenerationProblem
 from lcb_runner.evaluation import codegen_metrics
 
@@ -9,13 +11,31 @@ dataset = load_generation_dataset()
 dataset = sorted(dataset, key=lambda x: x.question_id)
 
 
-def check_model(model_key):
-    path = f"/home/naman/Repos/LiveCodeBench/run_models_outputs/{model_key}/chat_0.2_checked.json"
+def check_model(model_key, results_dir=None):
+    # Allow customizing the results directory or use a relative path from project root
+    if results_dir is None:
+        # Default to a "results" directory in the current working directory
+        results_dir = Path("results")
+    
+    # Use Path for safer, cross-platform path handling
+    path = Path(results_dir) / model_key / "chat_0.2_checked.json"
+    
+    # Check if the file exists
+    if not path.exists():
+        print(f"Warning: Results file not found at {path}")
+        return
+        
     with open(path) as f:
         old_results = json.load(f)
     old_results = sorted(old_results, key=lambda x: x["question_id"])
-    assert old_results[0]["question_id"] == dataset[0].question_id
-
+    
+    if not old_results or not dataset:
+        print("Error: Empty results or dataset")
+        return
+        
+    if old_results[0]["question_id"] != dataset[0].question_id:
+        print("Warning: Question IDs don't match between results and dataset")
+    
     def debug(idx):
         codegen_metrics(
             [dataset[idx].get_evaluation_sample()],

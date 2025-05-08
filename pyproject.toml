@@ -19,6 +19,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
+include_package_data = true
 packages = [
     "lcb_runner",
     "lcb_runner.runner",
