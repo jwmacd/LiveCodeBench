@@ -19,8 +19,11 @@ dependencies = [
 ]
 
 [tool.setuptools]
-# packages = ["lcb_runner"]
-packages = ["find"]
-
-[tool.setuptools.packages.find]
-include = ["lcb_runner", "lcb_runner.*"]
+packages = [
+    "lcb_runner",
+    "lcb_runner.runner",
+    "lcb_runner.utils",
+    "lcb_runner.prompts",
+    "lcb_runner.evaluation",
+    "lcb_runner.benchmarks"
+]
